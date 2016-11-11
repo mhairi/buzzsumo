@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#' Use Buzzsumo API to get the most shared content for a domain\n#'\n#' @param url Domain\n#' @param api_key Buzzsumo API key\n#' @return A nested list of results\n#' @export\n#'\n#' @examples \\dontrun{\n#' get_most_shared('slate.com', '123')\n#' }\nget_most_shared <- function(url, api_key){\n\n  get_url <- 'http://api.buzzsumo.com/search/articles.json'\n\n  parameters <- list(\n    'q'       = url,\n    'api_key' = api_key\n  )\n\n  response <- httr::GET(get_url, query = parameters)\n\n  if (httr::http_type(response) != \"application/json\") {\n    stop(\"API did not return json\", call. = FALSE)\n  }\n\n  httr::stop_for_status(response)\n\n  content <- httr::content(response, type = 'text', encoding = 'utf-8')\n  parsed  <- jsonlite::fromJSON(content, simplifyVector = FALSE)\n\n  return(parsed)\n}\n\n#' Create a dataframe containing the most shared article\n#'\n#' @param parsed A nested list; the result of running get_most_shared\n#'\n#' @return A dataframe with one row\n#' @export\n#'\n#' @examples \\dontrun{\n#' parsed <- get_most_shared('slate.com', '123')\n#' parse_top_result(parsed)\n#' }\nparse_top_result <- function(parsed){\n\n  result <- parsed$results[[1]]\n\n  return(as.data.frame(result))\n}\n\n\n",
+    "created" : 1470664043981.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3030342196",
+    "id" : "1E689B2C",
+    "lastKnownWriteTime" : 1470665042,
+    "last_content_update" : 1470665042290,
+    "path" : "~/Documents/APIs/buzzsumo/R/functions.R",
+    "project_path" : "R/functions.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
